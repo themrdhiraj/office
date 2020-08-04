@@ -15,7 +15,7 @@
                 <div class="form-group">
                     <label for="depName">Department Name</label>
                     <input id="depName" value="@if($act == 'Update') {{$department->depName}} @endif" name="depName"
-                        type="text" class="form-control">
+                        type="text" class="form-control" placeholder="Department Name">
                     @if($act == 'Update')
                     <label for="depStatus">Department Status</label>
                     <select name="depStatus" id="depStatus" class="form-control">
