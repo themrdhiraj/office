@@ -16,3 +16,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+  
+Route::resource('/home', 'EmployeeController');
+Route::get('/admin', 'AdminController@dashboard')->name('admin');
+Route::get('/adminSettings', 'AdminController@settings')->name('adminSettings');
+
+// Settings
+Route::get('/adminSettings/{id}', 'DepartmentController@index');
+Route::put('/depUpdate/{id}', 'DepartmentController@update');
+Route::delete('/department/{id}/delete', 'DepartmentController@delete');
+Route::post('/department', 'DepartmentController@store')->name('department');
