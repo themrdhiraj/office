@@ -40,7 +40,7 @@ class DepartmentController extends Controller
         ]);
 
         if($department){
-            return redirect('/adminSettings')->with('success', 'Department successfully added!');
+            return redirect('/adminSettings')->with('success', 'Department successfully updated!');
         }else{
             return back()->with('error', 'Sorry, There was a problem!');
         }
