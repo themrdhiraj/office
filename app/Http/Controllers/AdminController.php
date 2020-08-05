@@ -62,6 +62,7 @@ class AdminController extends Controller
 
     public function storeEmp(Request $request)
     {
+        // return $request;
         $act = $request->input('act');
         $id = $request->input('id');
 
@@ -102,7 +103,7 @@ class AdminController extends Controller
         }
 
         // Status Setup
-        if ($request->input('empStatus')) {
+        if ($act == 'Update') {
             $status = $request->input('empStatus');
         }else{
             $status = 1;

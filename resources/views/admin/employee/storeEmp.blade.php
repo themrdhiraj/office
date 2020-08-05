@@ -59,7 +59,7 @@
                     </select>
                 </div>
                 <input type="hidden" name="id" value="{{$employee->id}}">
-                <input type="hidden" name="empImage" value="{{$employee->empImage}}">
+                {{-- <input type="hidden" name="empImage" value="{{$employee->empImage}}"> --}}
                 @endif
                 <input type="hidden" name="act" value="{{$act}}">
 

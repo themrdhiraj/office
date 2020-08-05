@@ -6,7 +6,7 @@
         <div class="card-header">Employees</div>
         <div class="card-body">
             @if (count($employees))
-            <div class="responsive">
+            <div class="table-responsive">
                 <table class="table text-center">
                     <thead>
                         <tr>
