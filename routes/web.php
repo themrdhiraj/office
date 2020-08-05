@@ -28,3 +28,10 @@ Route::get('/adminSettings/{id}', 'DepartmentController@index');
 Route::put('/depUpdate/{id}', 'DepartmentController@update');
 Route::delete('/department/{id}/delete', 'DepartmentController@delete');
 Route::post('/department', 'DepartmentController@store')->name('department');
+
+// Employee
+Route::get('/employee', 'AdminController@addEmp')->name('addEmp');
+Route::get('/employee/{id}', 'AdminController@editEmp');
+Route::post('/storeEmp', 'AdminController@storeEmp')->name('storeEmp');
+Route::delete('/delEmp/{id}', 'AdminController@delEmp');
+Route::get('/viewEmp', 'AdminController@viewEmp')->name('viewEmp');

@@ -77,9 +77,13 @@
 
         <main class="container py-2">
             @include('layouts.messages')
-            @yield('content')
+            <div class="container">
+                <div class="row justify-content-center">
+                    @yield('content')
+                </div>
+            </div>
             {{-- Shows page render time --}}
-            <small class="float-right">{{ (microtime(true) - LARAVEL_START) }}</small>
+            <small class="float-right">{{ round(microtime(true) - LARAVEL_START, 3) }}</small>
         </main>
     </div>
 </body>
