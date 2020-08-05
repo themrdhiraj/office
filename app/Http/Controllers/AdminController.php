@@ -43,7 +43,7 @@ class AdminController extends Controller
     }
 
     public function addEmp()
-    {
+    { 
         $data = array(
             'act' => 'Add',
             'employee' => null
@@ -87,23 +87,27 @@ class AdminController extends Controller
 
             //file name to store
 
-            $fileNameToStore = 'Employee-'.str_replace(' ', '',$request->empName).date('-Ymdhi').'.'.$extension;
+            $fileNameToStore = 'Employee-'.str_replace(' ', '',$request->empName).date('-Ymdhi-').rand(0,999).'.'.$extension;
 
             //upload image
             $path = $request->file('empImage')->storeAs('public/empImages/', $fileNameToStore);
-        }else{
-            if ($request->input('empImage')) {
-                $fileNameToStore = $request->input('empImage');
-            }else{
-                $fileNameToStore = 'noimage.jpg';
+            
+            // On update change
+            if ($act == 'Update') {
+                $find = Employees::find($id);
+                Storage::delete('public/empImages/'.$find->empImage);
             }
+        }else{
+            $fileNameToStore = 'noimage.jpg';
         }
 
-            if ($request->input('empStatus')) {
-                $status = $request->input('empStatus');
-            }else{
-                $status = 1;
-            }
+        // Status Setup
+        if ($request->input('empStatus')) {
+            $status = $request->input('empStatus');
+        }else{
+            $status = 1;
+        }
+
 
         $data = ([
             'empName' => $request->input('empName'),
@@ -115,7 +119,7 @@ class AdminController extends Controller
             'addedBy' => auth()->user()->id,
             ]);
 
-
+        // Defines to update or insert
         if ($act == 'Add') {
             $employee = Employees::create($data);
         }elseif($act == 'Update'){
@@ -124,6 +128,7 @@ class AdminController extends Controller
             return back()->with('error', 'Invalid Access Token!'); 
         }
         
+        // Success or Error Message
         if($employee){
             return redirect()->route('viewEmp')->with('success', 'Employee '.$act.'ed successfully!');
         }else{
@@ -135,16 +140,18 @@ class AdminController extends Controller
     {
        $find = Employees::find($id);
 
+       //Remove file
        if ($find->empImage != 'noimage.jpg') {
-            Storage::delete('public/empImages/'.$find->empImage);
+           Storage::delete('public/empImages/'.$find->empImage);
         }
-
+        
         $employee = $find->delete();
-
-       if ($employee) {
-           return back()->with('success', 'Employee deleted successfully!');
-       }else{
-           return back()->with('error', 'There was a problem!');
-       }
+        
+        // Response message
+        if ($employee) {
+            return back()->with('success', 'Employee deleted successfully!');
+        }else{
+            return back()->with('error', 'There was a problem!');
+        }
     }
 }
