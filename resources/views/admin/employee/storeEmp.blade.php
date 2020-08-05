@@ -7,7 +7,7 @@
             {{$act}} Employee
         </div>
         <div class="card-body">
-            <form action="{{route('storeEmp')}}" method="POST">
+            <form action="{{route('storeEmp')}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <label for="empName">Employee Name</label>
@@ -37,7 +37,16 @@
                         value="{{ isset($employee) ? $employee->empContact : null }}">
                 </div>
 
+                <div class="form-group">
+                    <label for="empImage">Employee Photo</label>
+                    <input type="file" id="empImage" name="empImage" class="form-control-file">
+                </div>
+
                 @if($act == 'Update')
+                <div class="form-group">
+                    <img style="height: 5rem" src="/storage/empImages/{{ $employee->empImage}}"
+                        alt="{{ $employee->empImage}}" class="img-thumbnail">
+                </div>
                 <div class="form-group">
                     <label for="empStatus">Employee Status</label>
                     <select name="empStatus" id="empStatus" class="form-control">
@@ -50,6 +59,7 @@
                     </select>
                 </div>
                 <input type="hidden" name="id" value="{{$employee->id}}">
+                <input type="hidden" name="empImage" value="{{$employee->empImage}}">
                 @endif
                 <input type="hidden" name="act" value="{{$act}}">
 

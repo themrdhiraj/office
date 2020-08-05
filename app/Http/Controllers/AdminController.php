@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Departments;
 use App\Employees;
 
@@ -35,7 +36,8 @@ class AdminController extends Controller
     public function viewEmp()
     {
         $data = array(
-            'employees' => Employees::paginate(5)
+            'employees' => Employees::orderBy('empName', 'asc')
+                ->paginate(5)
         );
         return view('admin.employee.viewEmp')->with($data);
     }
@@ -65,28 +67,59 @@ class AdminController extends Controller
 
         $validatedData = $request->validate([
         'empName' => 'required',
-        'empEmail' => 'required|unique:employees',
+        'empEmail' => 'required',
         'empAddress' => 'required',
         'empContact' => 'required',
+        'empImage' => 'nullable|max:1999',
         ]);
 
-        if ($act == 'Add') {
-            $employee = Employees::create([
+        //handle file upload
+        if ($request->hasFile('empImage')) {
+
+            //get file name with the extension
+            $fileNameWithExt = $request->file('empImage')->getClientOriginalName();
+
+            //get just file name
+            //$filename = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
+
+            //get just ext
+            $extension = $request->file('empImage')->getClientOriginalExtension();
+
+            //file name to store
+
+            $fileNameToStore = 'Employee-'.str_replace(' ', '',$request->empName).date('-Ymdhi').'.'.$extension;
+
+            //upload image
+            $path = $request->file('empImage')->storeAs('public/empImages/', $fileNameToStore);
+        }else{
+            if ($request->input('empImage')) {
+                $fileNameToStore = $request->input('empImage');
+            }else{
+                $fileNameToStore = 'noimage.jpg';
+            }
+        }
+
+            if ($request->input('empStatus')) {
+                $status = $request->input('empStatus');
+            }else{
+                $status = 1;
+            }
+
+        $data = ([
             'empName' => $request->input('empName'),
             'empEmail' => $request->input('empEmail'),
             'empAddress' => $request->input('empAddress'),
             'empContact' => $request->input('empContact'),
+            'empStatus' => $status,
+            'empImage' => $fileNameToStore,
             'addedBy' => auth()->user()->id,
-        ]);
+            ]);
+
+
+        if ($act == 'Add') {
+            $employee = Employees::create($data);
         }elseif($act == 'Update'){
-           $employee = Employees::find($id)->update([
-            'empName' => $request->input('empName'),
-            'empEmail' => $request->input('empEmail'),
-            'empAddress' => $request->input('empAddress'),
-            'empContact' => $request->input('empContact'),
-            'empStatus' => $request->input('empStatus'),
-            'addedBy' => auth()->user()->id
-           ]);
+           $employee = Employees::find($id)->update($data);
         }else{
             return back()->with('error', 'Invalid Access Token!'); 
         }
@@ -100,7 +133,13 @@ class AdminController extends Controller
 
     public function delEmp($id)
     {
-       $employee = Employees::find($id)->delete();
+       $find = Employees::find($id);
+
+       if ($find->empImage != 'noimage.jpg') {
+            Storage::delete('public/empImages/'.$find->empImage);
+        }
+
+        $employee = $find->delete();
 
        if ($employee) {
            return back()->with('success', 'Employee deleted successfully!');

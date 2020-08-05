@@ -12,6 +12,7 @@
                         <tr>
                             <th>#</th>
                             <th>Employee Name</th>
+                            <th>Employee Photo</th>
                             <th>Employee E-mail</th>
                             <th>Employee Address</th>
                             <th>Employee Contact</th>
@@ -24,6 +25,10 @@
                         <tr>
                             <td>{{ $item->id}}</td>
                             <td>{{ $item->empName}}</td>
+                            <td>
+                                <img style="height: 5rem" src="/storage/empImages/{{ $item->empImage}}"
+                                    alt="{{ $item->empImage}}" class="img-thumbnail">
+                            </td>
                             <td>{{ $item->empEmail}}</td>
                             <td>{{ $item->empAddress}}</td>
                             <td>{{ $item->empContact}}</td>
@@ -40,7 +45,7 @@
                                 <form action="/delEmp/{{ $item->id }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <div class="form-group">
+                                    <div class="btn-group">
                                         <a href="/employee/{{$item->id}}" class="btn btn-success">Edit</a>
                                         <button type="submit" onclick="return confirm('Are you sure?')"
                                             class="btn btn-dark">Delete</button>
