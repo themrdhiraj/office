@@ -11,13 +11,13 @@
                     <label for="projName">Project Name</label>
                     <input type="text" id="projName" name="projName" class="form-control"
                         value="{{ isset($project) ? $project->projName : null }}"
-                        placeholder="{{ isset($project) ? $project->projName : null }}">
+                        placeholder="{{ isset($project) ? $project->projName : 'Project Name' }}">
                 </div>
 
                 <div class="form-group">
                     <label for="projDescr">Project Description</label>
                     <textarea name="projDescr" id="projDescr" class="form-control"
-                        placeholder="{{ isset($project) ? $project->projDescr : null }}">{{ isset($project) ? $project->projDescr : null }}</textarea>
+                        placeholder="{{ isset($project) ? $project->projDescr : 'Project Description' }}">{{ isset($project) ? $project->projDescr : null }}</textarea>
                 </div>
 
                 <div class="form-group">
